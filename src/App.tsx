@@ -6,7 +6,7 @@ import Categories from './components/Categories';
  
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Collection from './components/collection';
+import Collection from './components/Collection';
 
 function App() {
   return (
