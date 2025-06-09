@@ -51,19 +51,23 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Link 
               to="/browse"
-              className="group bg-[#f4a622] text-[#001e28] px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center gap-2"
+              className="group relative bg-gradient-to-r from-[#f4a622] to-[#e6951f] text-[#001e28] px-10 py-5 rounded-full font-bold text-lg transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-[#f4a622]/30 flex items-center gap-3 overflow-hidden"
             >
-              <Shirt size={20} />
-              Browse Collection
-              <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" size={20} />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#e6951f] to-[#f4a622] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <Shirt size={22} className="relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+              <span className="relative z-10">Browse Collection</span>
+              <ArrowRight className="relative z-10 group-hover:translate-x-2 transition-transform duration-300" size={22} />
+              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
             </Link>
             
             <Link 
               to="/sell"
-              className="group bg-white/10 backdrop-blur-md text-white border-2 border-[#f4a622] px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-[#f4a622]/20 flex items-center gap-2"
+              className="group relative bg-transparent border-3 border-[#f4a622] text-[#f4a622] px-10 py-5 rounded-full font-bold text-lg transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-[#f4a622]/20 flex items-center gap-3 overflow-hidden backdrop-blur-sm"
             >
-              <Tag size={20} />
-              Sell Your Clothes
+              <div className="absolute inset-0 bg-[#f4a622] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <Tag size={22} className="relative z-10 group-hover:rotate-12 transition-transform duration-300 group-hover:text-[#001e28]" />
+              <span className="relative z-10 group-hover:text-[#001e28] transition-colors duration-300">Sell Your Clothes</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
             </Link>
           </div>
 
@@ -87,20 +91,33 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Featured categories preview */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-            {[
-              { name: "Women's", emoji: "👗" },
-              { name: "Men's", emoji: "👔" },
-            ].map((category, index) => (
-              <div
-                key={index}
-                className="group bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-[#f4a622]/20 transition-all duration-300 cursor-pointer"
-              >
-                <div className="text-2xl mb-2">{category.emoji}</div>
-                <div className="text-white text-sm font-medium">{category.name}</div>
+          {/* Enhanced featured categories preview */}
+          <div className="mt-16 grid grid-cols-2 gap-6 max-w-lg mx-auto">
+            <Link
+              to="/browse?category=Women's Fashion"
+              className="group relative bg-gradient-to-br from-pink-500/20 to-rose-500/20 backdrop-blur-sm rounded-2xl p-6 hover:from-pink-500/30 hover:to-rose-500/30 transition-all duration-500 cursor-pointer border border-pink-500/30 hover:border-pink-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-rose-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+              <div className="relative z-10">
+                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">👗</div>
+                <div className="text-white font-bold text-lg mb-1">Women's</div>
+                <div className="text-pink-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">2,500+ items</div>
               </div>
-            ))}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12 rounded-2xl"></div>
+            </Link>
+
+            <Link
+              to="/browse?category=Men's Fashion"
+              className="group relative bg-gradient-to-br from-blue-500/20 to-indigo-500/20 backdrop-blur-sm rounded-2xl p-6 hover:from-blue-500/30 hover:to-indigo-500/30 transition-all duration-500 cursor-pointer border border-blue-500/30 hover:border-blue-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+              <div className="relative z-10">
+                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">👔</div>
+                <div className="text-white font-bold text-lg mb-1">Men's</div>
+                <div className="text-blue-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">1,800+ items</div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12 rounded-2xl"></div>
+            </Link>
           </div>
         </div>
 

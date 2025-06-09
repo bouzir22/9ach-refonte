@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Eye, ArrowRight, Sparkles } from 'lucide-react';
 import { items } from '../data/items';
 
 const Collection = () => {
@@ -40,11 +41,11 @@ const Collection = () => {
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="card h-full shadow-md border-0 rounded overflow-hidden bg-white">
-              <div className="relative h-72">
+            <div className="card h-full shadow-md border-0 rounded-xl overflow-hidden bg-white group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="relative h-72 overflow-hidden">
                 <img 
                   src={item.image} 
-                  className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${hoveredIndex === index ? 'opacity-0' : 'opacity-100'}`}
+                  className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-500 ${hoveredIndex === index ? 'opacity-0 scale-110' : 'opacity-100 scale-100'} group-hover:scale-110`}
                   alt={item.name}
                 />
                 
@@ -54,7 +55,7 @@ const Collection = () => {
                       <img
                         key={`${index}-${i}`}
                         src={altImg}
-                        className="object-cover h-full"
+                        className="object-cover h-full transition-transform duration-500 hover:scale-105"
                         style={{
                           width: '33.33%',
                           borderRight: i < 2 ? '2px solid white' : 'none'
@@ -64,38 +65,65 @@ const Collection = () => {
                     ))}
                   </div>
                 )}
+
+                {/* Overlay with quick actions */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <Link 
+                    to={`/item/${item.id}`}
+                    className="bg-white/90 backdrop-blur-sm text-gray-900 px-6 py-3 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-white hover:scale-105"
+                  >
+                    <Eye size={18} />
+                    Quick View
+                  </Link>
+                </div>
               </div>
               
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="text-lg font-semibold">{item.name}</h3>
+              <div className="p-5">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#001e28] transition-colors">{item.name}</h3>
                     <p className="text-sm text-gray-600 font-medium">{item.brand}</p>
                   </div>
-                  <div className="text-right">
-                    <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">{item.size}</span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full border">{item.size}</span>
                   </div>
                 </div>
                 
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">{item.description}</p>
                 
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center">
-                    <span className="text-gray-500 text-sm line-through mr-2">${item.originalPrice}</span>
-                    <span className="text-lg font-bold text-gray-900">${item.price}</span>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-500 text-sm line-through">${item.originalPrice}</span>
+                    <span className="text-xl font-bold text-gray-900">${item.price}</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                      {Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% off
+                    </span>
                   </div>
-                  <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                </div>
+
+                <div className="flex items-center justify-between mb-4">
+                  <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                    item.condition === 'Like New' ? 'bg-emerald-100 text-emerald-700' :
+                    item.condition === 'Excellent' ? 'bg-blue-100 text-blue-700' :
+                    'bg-yellow-100 text-yellow-700'
+                  }`}>
                     {item.condition}
                   </span>
                 </div>
               </div>
               
-              <div className="px-4 py-3 bg-white">
+              <div className="px-5 pb-5">
                 <Link 
                   to={`/item/${item.id}`}
-                  className="w-full block text-center py-2 border border-gray-800 rounded hover:bg-gray-800 hover:text-white transition-colors"
+                  className="group/btn relative w-full block text-center py-3 bg-gradient-to-r from-[#001e28] to-[#003544] text-white rounded-xl font-semibold transition-all duration-300 hover:from-[#f4a622] hover:to-[#e6951f] hover:text-[#001e28] hover:shadow-lg hover:shadow-[#f4a622]/30 overflow-hidden"
                 >
-                  View Details
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#f4a622] to-[#e6951f] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    <Eye size={18} />
+                    View Details
+                    <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform duration-300" />
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
                 </Link>
               </div>
             </div>
@@ -103,12 +131,16 @@ const Collection = () => {
         ))}
       </div>
       
-      <div className="flex justify-center mt-8">
+      <div className="flex justify-center mt-12">
         <Link 
           to="/browse"
-          className="px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+          className="group relative bg-gradient-to-r from-[#001e28] to-[#003544] text-white px-10 py-4 rounded-full font-bold text-lg transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-[#001e28]/30 flex items-center gap-3 overflow-hidden"
         >
-          Browse All Collections
+          <div className="absolute inset-0 bg-gradient-to-r from-[#f4a622] to-[#e6951f] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <Sparkles size={22} className="relative z-10 group-hover:rotate-12 transition-transform duration-300 group-hover:text-[#001e28]" />
+          <span className="relative z-10 group-hover:text-[#001e28] transition-colors duration-300">Browse All Collections</span>
+          <ArrowRight className="relative z-10 group-hover:translate-x-2 group-hover:text-[#001e28] transition-all duration-300" size={22} />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
         </Link>
       </div>
     </section>
