@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Shirt, Tag, TrendingUp } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="relative  flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background with 9ach brand colors */}
       <div className="absolute inset-0 bg-[#001e28]">
         <div className="absolute inset-0 bg-gradient-to-br from-[#001e28] to-[#001e28]/90"></div>
@@ -48,16 +49,22 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <button className="group bg-[#f4a622] text-[#001e28] px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center gap-2">
+            <Link 
+              to="/browse"
+              className="group bg-[#f4a622] text-[#001e28] px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center gap-2"
+            >
               <Shirt size={20} />
               Browse Collection
               <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" size={20} />
-            </button>
+            </Link>
             
-            <button className="group bg-white/10 backdrop-blur-md text-white border-2 border-[#f4a622] px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-[#f4a622]/20 flex items-center gap-2">
+            <Link 
+              to="/sell"
+              className="group bg-white/10 backdrop-blur-md text-white border-2 border-[#f4a622] px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-[#f4a622]/20 flex items-center gap-2"
+            >
               <Tag size={20} />
               Sell Your Clothes
-            </button>
+            </Link>
           </div>
 
           {/* Fashion-focused stats */}
@@ -85,7 +92,6 @@ const Hero = () => {
             {[
               { name: "Women's", emoji: "👗" },
               { name: "Men's", emoji: "👔" },
- 
             ].map((category, index) => (
               <div
                 key={index}
@@ -99,7 +105,7 @@ const Hero = () => {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2  ">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
           <div className="w-6 h-10 border-2 border-[#f4a622] rounded-full flex justify-center">
             <div className="w-1 h-3 bg-[#f4a622] rounded-full mt-2 animate-pulse"></div>
           </div>

@@ -1,28 +1,19 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { items } from '../data/items';
 
 const Collection = () => {
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [hoverTimeout, setHoverTimeout] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  const images = [
-    'https://st5.depositphotos.com/2597299/70062/i/450/depositphotos_700626598-stock-photo-handsome-muscular-man-black-white.jpg',
-    'https://st4.depositphotos.com/12985790/20642/i/600/depositphotos_206425708-stock-photo-confident-male-model-autumn-outfit.jpg',
-    'https://st2.depositphotos.com/4071389/7049/i/600/depositphotos_70494773-stock-photo-attractive-man-posing.jpg',
-    'https://st5.depositphotos.com/88369228/75539/i/600/depositphotos_755396432-stock-photo-fashionable-rock-roll-styled-guy.jpg',
-    'https://st4.depositphotos.com/12982378/20132/i/600/depositphotos_201324140-stock-photo-handsome-bearded-businessman-wearing-suit.jpg',
-    'https://st4.depositphotos.com/12985790/20643/i/600/depositphotos_206430254-stock-photo-handsome-bearded-man-posing-autumn.jpg'
-  ];
+  const displayItems = items.slice(0, 6);
 
-  const getAlternateImages = (index:any) => {
-    const alternateImages = [];
-    for (let i = 1; i <= 3; i++) {
-      const nextIndex = (index + i) % images.length;
-      alternateImages.push(images[nextIndex]);
-    }
-    return alternateImages;
+  const getAlternateImages = (index: number) => {
+    const item = displayItems[index];
+    return item.images.slice(1, 4);
   };
 
-  const handleMouseEnter = (index:any) => {
+  const handleMouseEnter = (index: number) => {
     if (hoverTimeout) clearTimeout(hoverTimeout);
     
     const timeout = setTimeout(() => {
@@ -42,19 +33,19 @@ const Collection = () => {
       <h2 className="text-center mb-12 text-4xl font-bold">Preloved Collection</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {images.map((img, index) => (
+        {displayItems.map((item, index) => (
           <div 
             className="col" 
-            key={img}
+            key={item.id}
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="card h-full shadow-md border-0 rounded overflow-hidden">
+            <div className="card h-full shadow-md border-0 rounded overflow-hidden bg-white">
               <div className="relative h-72">
                 <img 
-                  src={img} 
+                  src={item.image} 
                   className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${hoveredIndex === index ? 'opacity-0' : 'opacity-100'}`}
-                  alt={`Preloved item ${index + 1}`}
+                  alt={item.name}
                 />
                 
                 {hoveredIndex === index && (
@@ -76,17 +67,36 @@ const Collection = () => {
               </div>
               
               <div className="p-4">
-                <h3 className="text-lg font-semibold">Designer Item {index + 1}</h3>
-                <p className="text-gray-600 mt-2">Stylish and sustainable choice. Gently used with minimal wear.</p>
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="text-lg font-semibold">{item.name}</h3>
+                    <p className="text-sm text-gray-600 font-medium">{item.brand}</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">{item.size}</span>
+                  </div>
+                </div>
+                
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center">
+                    <span className="text-gray-500 text-sm line-through mr-2">${item.originalPrice}</span>
+                    <span className="text-lg font-bold text-gray-900">${item.price}</span>
+                  </div>
+                  <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                    {item.condition}
+                  </span>
+                </div>
               </div>
               
               <div className="px-4 py-3 bg-white">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold">$49.99</span>
-                  <button className="px-3 py-1 border border-gray-800 rounded hover:bg-gray-800 hover:text-white transition-colors">
-                    View Details
-                  </button>
-                </div>
+                <Link 
+                  to={`/item/${item.id}`}
+                  className="w-full block text-center py-2 border border-gray-800 rounded hover:bg-gray-800 hover:text-white transition-colors"
+                >
+                  View Details
+                </Link>
               </div>
             </div>
           </div>
@@ -94,9 +104,12 @@ const Collection = () => {
       </div>
       
       <div className="flex justify-center mt-8">
-        <button className="px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors">
+        <Link 
+          to="/browse"
+          className="px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+        >
           Browse All Collections
-        </button>
+        </Link>
       </div>
     </section>
   );

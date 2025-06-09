@@ -1,22 +1,22 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Hero from './components/Hero';
-import Features from './components/Features';
-import Categories from './components/Categories';
- 
-import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Collection from './components/Collection';
+import HomePage from './pages/HomePage';
+import ItemDetailsPage from './pages/ItemDetailsPage';
+import BrowseCollectionPage from './pages/BrowseCollectionPage';
+import SellProductPage from './pages/SellProductPage';
 
 function App() {
   return (
     <div className="min-h-screen">
       <Header />
-      <Hero />
-      <Categories />
-      <Collection />
-      <Features />
-      <Contact />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/item/:id" element={<ItemDetailsPage />} />
+        <Route path="/browse" element={<BrowseCollectionPage />} />
+        <Route path="/sell" element={<SellProductPage />} />
+      </Routes>
       <Footer />
     </div>
   );
