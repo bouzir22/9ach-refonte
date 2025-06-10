@@ -74,16 +74,22 @@ const Header = () => {
             }`}>
               <Heart size={20} />
             </button>
-            <button className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
-              isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/20'
-            }`}>
+            <Link 
+              to="/cart"
+              className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
+                isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/20'
+              }`}
+            >
               <ShoppingBag size={20} />
-            </button>
-            <button className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
-              isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/20'
-            }`}>
+            </Link>
+            <Link 
+              to="/profile"
+              className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
+                isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/20'
+              }`}
+            >
               <User size={20} />
-            </button>
+            </Link>
           </div>
 
           <div className="md:hidden">
@@ -132,14 +138,22 @@ const Header = () => {
                 <Heart size={20} />
                 <span className="text-xs">Wishlist</span>
               </button>
-              <button className="flex flex-col items-center gap-1 text-gray-700 hover:text-emerald-600 transition-colors duration-300">
+              <Link 
+                to="/cart"
+                className="flex flex-col items-center gap-1 text-gray-700 hover:text-emerald-600 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <ShoppingBag size={20} />
                 <span className="text-xs">Cart</span>
-              </button>
-              <button className="flex flex-col items-center gap-1 text-gray-700 hover:text-emerald-600 transition-colors duration-300">
+              </Link>
+              <Link 
+                to="/profile"
+                className="flex flex-col items-center gap-1 text-gray-700 hover:text-emerald-600 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <User size={20} />
                 <span className="text-xs">Account</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
