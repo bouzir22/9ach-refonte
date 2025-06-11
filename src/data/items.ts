@@ -34,8 +34,9 @@ export const items: Item[] = [
     brand: 'Zara',
     price: 28,
     originalPrice: 89,
-    image: ' ',
+    image: 'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=800',
     images: [
+      'https://drive.google.com/file/d/1ZZH8hvtpsf_lLoyizTCBlPPArWLcCkSP/view',
  
     ],
     condition: 'Like New',
