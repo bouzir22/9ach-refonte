@@ -38,7 +38,8 @@ export const items: Item[] = [
     images: [
       'https://i.ibb.co/213Jtjsm/openart-image-om-IJRsrw-1749600800262-raw.jpg',
             'https://i.ibb.co/213Jtjsm/openart-image-om-IJRsrw-1749600800262-raw.jpg',
-            'https://i.ibb.co/213Jtjsm/openart-image-om-IJRsrw-1749600800262-raw.jpg',
+            'https://i.ibb.co/0jkjwVwX/openart-image-Z2kgq9s-G-1749600802549-raw.jpg',
+      'https://i.ibb.co/wNfnmJGw/openart-image-mf7-Oyc-Wp-1749600824633-raw.jpg'
  
     ],
     condition: 'Like New',
