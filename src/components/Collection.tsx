@@ -88,11 +88,19 @@ const Collection = () => {
                     </div>
                   )}
 
-                  {/* Availability indicator */}
+                  {/* Availability indicator with location hover */}
                   <div className="absolute top-3 left-3">
-                    <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${availabilityInfo.color} backdrop-blur-sm`}>
+                    <div className={`relative flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${availabilityInfo.color} backdrop-blur-sm group/availability`}>
                       <AvailabilityIcon size={12} className={availabilityInfo.iconColor} />
                       <span>{availabilityInfo.text}</span>
+                      
+                      {/* Location tooltip for merchant items */}
+                      {item.availability === 'merchant' && item.location && (
+                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover/availability:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                          📍 {item.location}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -131,7 +139,21 @@ const Collection = () => {
                     </div>
                   </div>
 
+                  {/* Availability and Condition in same row */}
                   <div className="flex items-center justify-between mb-4">
+                    <div className={`relative flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${availabilityInfo.color} group/availability-card`}>
+                      <AvailabilityIcon size={12} className={availabilityInfo.iconColor} />
+                      <span>{availabilityInfo.text}</span>
+                      
+                      {/* Location tooltip for merchant items */}
+                      {item.availability === 'merchant' && item.location && (
+                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover/availability-card:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                          📍 {item.location}
+                        </div>
+                      )}
+                    </div>
+                    
                     <span className={`text-xs px-3 py-1 rounded-full font-medium ${
                       item.condition === 'Like New' ? 'bg-emerald-100 text-emerald-700' :
                       item.condition === 'Excellent' ? 'bg-blue-100 text-blue-700' :

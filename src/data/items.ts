@@ -13,6 +13,7 @@ export interface Item {
   material: string;
   color: string;
   availability: 'store' | 'merchant';
+  location?: string; // Location for merchant items
   seller: {
     name: string;
     rating: number;
@@ -78,6 +79,7 @@ export const items: Item[] = [
     material: '100% Cotton Denim',
     color: 'Blue',
     availability: 'merchant',
+    location: 'Downtown Fashion District, Los Angeles',
     seller: {
       name: 'Mike R.',
       rating: 4.9,
@@ -140,6 +142,7 @@ export const items: Item[] = [
     material: '100% Linen',
     color: 'White',
     availability: 'merchant',
+    location: 'SoHo Boutique District, New York',
     seller: {
       name: 'Jessica K.',
       rating: 4.7,
@@ -202,6 +205,7 @@ export const items: Item[] = [
     material: '100% Silk',
     color: 'Multi',
     availability: 'merchant',
+    location: 'Luxury Consignment, Beverly Hills',
     seller: {
       name: 'Claire D.',
       rating: 5.0,
