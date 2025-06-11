@@ -36,10 +36,7 @@ export const items: Item[] = [
     originalPrice: 89,
     image: 'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=800',
     images: [
-      'https://drive.google.com/file/d/1ZZH8hvtpsf_lLoyizTCBlPPArWLcCkSP/view',
-      'https://images.pexels.com/photos/1082528/pexels-photo-1082528.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/1021293/pexels-photo-1021293.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/985635/pexels-photo-985635.jpeg?auto=compress&cs=tinysrgb&w=800'
+ 
     ],
     condition: 'Like New',
     size: 'S',
