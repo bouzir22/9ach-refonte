@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, ArrowRight, Sparkles } from 'lucide-react';
+import { Eye, ArrowRight, Sparkles, Building2, MapPin } from 'lucide-react';
 import { items } from '../data/items';
 
 const Collection = () => {
@@ -29,106 +29,137 @@ const Collection = () => {
     setHoveredIndex(null);
   };
 
+  const getAvailabilityInfo = (availability: 'store' | 'merchant') => {
+    if (availability === 'store') {
+      return {
+        icon: Building2,
+        text: 'Available in Store',
+        color: 'bg-blue-100 text-blue-700',
+        iconColor: 'text-blue-600'
+      };
+    } else {
+      return {
+        icon: MapPin,
+        text: 'With Merchant',
+        color: 'bg-orange-100 text-orange-700',
+        iconColor: 'text-orange-600'
+      };
+    }
+  };
+
   return (
     <section id="collection" className="my-5 container mx-auto px-4">
       <h2 className="text-center mb-12 text-4xl font-bold">Preloved Collection</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {displayItems.map((item, index) => (
-          <div 
-            className="col" 
-            key={item.id}
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className="card h-full shadow-md border-0 rounded-xl overflow-hidden bg-white group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative h-72 overflow-hidden">
-                <img 
-                  src={item.image} 
-                  className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-500 ${hoveredIndex === index ? 'opacity-0 scale-110' : 'opacity-100 scale-100'} group-hover:scale-110`}
-                  alt={item.name}
-                />
-                
-                {hoveredIndex === index && (
-                  <div className="flex h-full">
-                    {getAlternateImages(index).map((altImg, i) => (
-                      <img
-                        key={`${index}-${i}`}
-                        src={altImg}
-                        className="object-cover h-full transition-transform duration-500 hover:scale-105"
-                        style={{
-                          width: '33.33%',
-                          borderRight: i < 2 ? '2px solid white' : 'none'
-                        }}
-                        alt={`Alternate view ${i + 1}`}
-                      />
-                    ))}
-                  </div>
-                )}
+        {displayItems.map((item, index) => {
+          const availabilityInfo = getAvailabilityInfo(item.availability);
+          const AvailabilityIcon = availabilityInfo.icon;
+          
+          return (
+            <div 
+              className="col" 
+              key={item.id}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className="card h-full shadow-md border-0 rounded-xl overflow-hidden bg-white group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                <div className="relative h-72 overflow-hidden">
+                  <img 
+                    src={item.image} 
+                    className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-500 ${hoveredIndex === index ? 'opacity-0 scale-110' : 'opacity-100 scale-100'} group-hover:scale-110`}
+                    alt={item.name}
+                  />
+                  
+                  {hoveredIndex === index && (
+                    <div className="flex h-full">
+                      {getAlternateImages(index).map((altImg, i) => (
+                        <img
+                          key={`${index}-${i}`}
+                          src={altImg}
+                          className="object-cover h-full transition-transform duration-500 hover:scale-105"
+                          style={{
+                            width: '33.33%',
+                            borderRight: i < 2 ? '2px solid white' : 'none'
+                          }}
+                          alt={`Alternate view ${i + 1}`}
+                        />
+                      ))}
+                    </div>
+                  )}
 
-                {/* Overlay with quick actions */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <Link 
-                    to={`/item/${item.id}`}
-                    className="bg-white/90 backdrop-blur-sm text-gray-900 px-6 py-3 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-white hover:scale-105"
-                  >
-                    <Eye size={18} />
-                    Quick View
-                  </Link>
-                </div>
-              </div>
-              
-              <div className="p-5">
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#001e28] transition-colors">{item.name}</h3>
-                    <p className="text-sm text-gray-600 font-medium">{item.brand}</p>
+                  {/* Availability indicator */}
+                  <div className="absolute top-3 left-3">
+                    <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${availabilityInfo.color} backdrop-blur-sm`}>
+                      <AvailabilityIcon size={12} className={availabilityInfo.iconColor} />
+                      <span>{availabilityInfo.text}</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <span className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full border">{item.size}</span>
+
+                  {/* Overlay with quick actions */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <Link 
+                      to={`/item/${item.id}`}
+                      className="bg-white/90 backdrop-blur-sm text-gray-900 px-6 py-3 rounded-full font-semibold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-white hover:scale-105"
+                    >
+                      <Eye size={18} />
+                      Quick View
+                    </Link>
                   </div>
                 </div>
                 
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">{item.description}</p>
-                
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-500 text-sm line-through">${item.originalPrice}</span>
-                    <span className="text-xl font-bold text-gray-900">${item.price}</span>
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                      {Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% off
+                <div className="p-5">
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#001e28] transition-colors">{item.name}</h3>
+                      <p className="text-sm text-gray-600 font-medium">{item.brand}</p>
+                    </div>
+                    <div className="flex flex-col items-end gap-1">
+                      <span className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full border">{item.size}</span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">{item.description}</p>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500 text-sm line-through">${item.originalPrice}</span>
+                      <span className="text-xl font-bold text-gray-900">${item.price}</span>
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                        {Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% off
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-4">
+                    <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                      item.condition === 'Like New' ? 'bg-emerald-100 text-emerald-700' :
+                      item.condition === 'Excellent' ? 'bg-blue-100 text-blue-700' :
+                      'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {item.condition}
                     </span>
                   </div>
                 </div>
-
-                <div className="flex items-center justify-between mb-4">
-                  <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                    item.condition === 'Like New' ? 'bg-emerald-100 text-emerald-700' :
-                    item.condition === 'Excellent' ? 'bg-blue-100 text-blue-700' :
-                    'bg-yellow-100 text-yellow-700'
-                  }`}>
-                    {item.condition}
-                  </span>
+                
+                <div className="px-5 pb-5">
+                  <Link 
+                    to={`/item/${item.id}`}
+                    className="group/btn relative w-full block text-center py-3 bg-gradient-to-r from-[#001e28] to-[#003544] text-white rounded-xl font-semibold transition-all duration-300 hover:from-[#f4a622] hover:to-[#e6951f] hover:text-[#001e28] hover:shadow-lg hover:shadow-[#f4a622]/30 overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#f4a622] to-[#e6951f] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      <Eye size={18} />
+                      View Details
+                      <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform duration-300" />
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
+                  </Link>
                 </div>
               </div>
-              
-              <div className="px-5 pb-5">
-                <Link 
-                  to={`/item/${item.id}`}
-                  className="group/btn relative w-full block text-center py-3 bg-gradient-to-r from-[#001e28] to-[#003544] text-white rounded-xl font-semibold transition-all duration-300 hover:from-[#f4a622] hover:to-[#e6951f] hover:text-[#001e28] hover:shadow-lg hover:shadow-[#f4a622]/30 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#f4a622] to-[#e6951f] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    <Eye size={18} />
-                    View Details
-                    <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform duration-300" />
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
-                </Link>
-              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       
       <div className="flex justify-center mt-12">

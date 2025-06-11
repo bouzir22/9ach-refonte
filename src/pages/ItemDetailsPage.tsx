@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Heart, Share2, Star, Shield, Truck, RotateCcw, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Heart, Share2, Star, Shield, Truck, RotateCcw, MessageCircle, Building2, MapPin } from 'lucide-react';
 import { items } from '../data/items';
 
 const ItemDetailsPage = () => {
@@ -22,6 +22,29 @@ const ItemDetailsPage = () => {
 
   const savings = Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100);
 
+  const getAvailabilityInfo = (availability: 'store' | 'merchant') => {
+    if (availability === 'store') {
+      return {
+        icon: Building2,
+        text: 'Available in Store',
+        description: 'This item is available in our physical store. You can visit us to see it in person or place a deposit to reserve it.',
+        color: 'bg-blue-50 border-blue-200 text-blue-800',
+        iconColor: 'text-blue-600'
+      };
+    } else {
+      return {
+        icon: MapPin,
+        text: 'With Merchant',
+        description: 'This item is currently with one of our trusted merchant partners. We can arrange for inspection and delivery.',
+        color: 'bg-orange-50 border-orange-200 text-orange-800',
+        iconColor: 'text-orange-600'
+      };
+    }
+  };
+
+  const availabilityInfo = getAvailabilityInfo(item.availability);
+  const AvailabilityIcon = availabilityInfo.icon;
+
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -36,12 +59,19 @@ const ItemDetailsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Gallery */}
           <div className="space-y-4">
-            <div className="aspect-square bg-white rounded-lg overflow-hidden shadow-lg">
+            <div className="aspect-square bg-white rounded-lg overflow-hidden shadow-lg relative">
               <img
                 src={item.images[selectedImage]}
                 alt={item.name}
                 className="w-full h-full object-cover"
               />
+              {/* Availability indicator on main image */}
+              <div className="absolute top-4 left-4">
+                <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${availabilityInfo.color} backdrop-blur-sm`}>
+                  <AvailabilityIcon size={16} className={availabilityInfo.iconColor} />
+                  <span className="font-medium">{availabilityInfo.text}</span>
+                </div>
+              </div>
             </div>
             
             <div className="grid grid-cols-4 gap-2">
@@ -103,6 +133,17 @@ const ItemDetailsPage = () => {
               </div>
             </div>
 
+            {/* Availability Information */}
+            <div className={`p-4 rounded-lg border ${availabilityInfo.color}`}>
+              <div className="flex items-start gap-3">
+                <AvailabilityIcon size={24} className={availabilityInfo.iconColor} />
+                <div>
+                  <h3 className="font-semibold mb-1">{availabilityInfo.text}</h3>
+                  <p className="text-sm opacity-90">{availabilityInfo.description}</p>
+                </div>
+              </div>
+            </div>
+
             {/* Description */}
             <div>
               <h3 className="text-lg font-semibold mb-2">Description</h3>
@@ -150,13 +191,25 @@ const ItemDetailsPage = () => {
 
             {/* Action Buttons */}
             <div className="space-y-4">
-              <button className="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors">
-                Add to Cart - ${item.price}
-              </button>
-              
-              <button className="w-full border-2 border-black text-black py-4 rounded-lg font-semibold text-lg hover:bg-black hover:text-white transition-colors">
-                Buy Now
-              </button>
+              {item.availability === 'store' ? (
+                <>
+                  <button className="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors">
+                    Reserve with Deposit - ${Math.round(item.price * 0.2)}
+                  </button>
+                  <button className="w-full border-2 border-black text-black py-4 rounded-lg font-semibold text-lg hover:bg-black hover:text-white transition-colors">
+                    Visit Store to Purchase
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors">
+                    Add to Cart - ${item.price}
+                  </button>
+                  <button className="w-full border-2 border-black text-black py-4 rounded-lg font-semibold text-lg hover:bg-black hover:text-white transition-colors">
+                    Buy Now
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Trust Indicators */}

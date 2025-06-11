@@ -12,6 +12,7 @@ export interface Item {
   description: string;
   material: string;
   color: string;
+  availability: 'store' | 'merchant';
   seller: {
     name: string;
     rating: number;
@@ -45,6 +46,7 @@ export const items: Item[] = [
     description: 'Elegant silk blouse perfect for both office and evening wear. Features a classic cut with subtle shimmer that catches the light beautifully.',
     material: '100% Silk',
     color: 'Cream',
+    availability: 'store',
     seller: {
       name: 'Sarah M.',
       rating: 4.8,
@@ -75,6 +77,7 @@ export const items: Item[] = [
     description: 'Classic Levi\'s denim jacket with authentic vintage wash. Perfect for layering and adds instant cool to any outfit.',
     material: '100% Cotton Denim',
     color: 'Blue',
+    availability: 'merchant',
     seller: {
       name: 'Mike R.',
       rating: 4.9,
@@ -105,6 +108,7 @@ export const items: Item[] = [
     description: 'Luxuriously soft cashmere sweater in a timeless design. Perfect for cozy days and sophisticated styling.',
     material: '100% Cashmere',
     color: 'Beige',
+    availability: 'store',
     seller: {
       name: 'Emma L.',
       rating: 5.0,
@@ -135,6 +139,7 @@ export const items: Item[] = [
     description: 'Breezy linen dress perfect for summer days. Features a flattering A-line silhouette and adjustable straps.',
     material: '100% Linen',
     color: 'White',
+    availability: 'merchant',
     seller: {
       name: 'Jessica K.',
       rating: 4.7,
@@ -165,6 +170,7 @@ export const items: Item[] = [
     description: 'Elegant wool coat from Max Mara. Classic design that never goes out of style, perfect for professional settings.',
     material: '90% Wool, 10% Cashmere',
     color: 'Camel',
+    availability: 'store',
     seller: {
       name: 'Anna P.',
       rating: 4.9,
@@ -195,6 +201,7 @@ export const items: Item[] = [
     description: 'Authentic Hermès silk scarf with beautiful floral pattern. A timeless accessory that elevates any outfit.',
     material: '100% Silk',
     color: 'Multi',
+    availability: 'merchant',
     seller: {
       name: 'Claire D.',
       rating: 5.0,
