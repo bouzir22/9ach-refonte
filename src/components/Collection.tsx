@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, ArrowRight, Sparkles, Building2, MapPin } from 'lucide-react';
-import { items } from '../data/items';
+import { useItems } from '../hooks/useItems';
 
 const Collection = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
+  const { items, loading, error } = useItems();
   const displayItems = items.slice(0, 6);
 
   const getAlternateImages = (index: number) => {
     const item = displayItems[index];
-    return item.images.slice(1, 4);
+    return item?.images?.slice(1, 4) || [];
   };
 
   const handleMouseEnter = (index: number) => {
@@ -47,6 +48,43 @@ const Collection = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <section id="collection" className="my-5 container mx-auto px-4">
+        <h2 className="text-center mb-12 text-4xl font-bold">Preloved Collection</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="bg-white rounded-xl shadow-md animate-pulse">
+              <div className="h-72 bg-gray-200 rounded-t-xl"></div>
+              <div className="p-5 space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="collection" className="my-5 container mx-auto px-4">
+        <h2 className="text-center mb-12 text-4xl font-bold">Preloved Collection</h2>
+        <div className="text-center py-12">
+          <p className="text-red-600 mb-4">Error loading items: {error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+          >
+            Retry
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="collection" className="my-5 container mx-auto px-4">
       <h2 className="text-center mb-12 text-4xl font-bold">Preloved Collection</h2>
@@ -71,7 +109,7 @@ const Collection = () => {
                     alt={item.name}
                   />
                   
-                  {hoveredIndex === index && (
+                  {hoveredIndex === index && getAlternateImages(index).length > 0 && (
                     <div className="flex h-full">
                       {getAlternateImages(index).map((altImg, i) => (
                         <img
