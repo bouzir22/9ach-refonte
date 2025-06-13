@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Search, ShoppingBag, User, Heart } from 'lucide-react';
+import { Menu, X, Search, ShoppingBag, User, Heart, Settings } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isAdmin] = useState(true); // Simulate admin status
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,6 +70,16 @@ const Header = () => {
             >
               Sell
             </Link>
+            {isAdmin && (
+              <Link 
+                to="/admin"
+                className={`px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
+                  isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/20'
+                }`}
+              >
+                <Settings size={20} />
+              </Link>
+            )}
             <button className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
               isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/20'
             }`}>
@@ -132,6 +143,15 @@ const Header = () => {
               >
                 Sell Your Items
               </Link>
+              {isAdmin && (
+                <Link 
+                  to="/admin"
+                  className="px-4 py-2 text-gray-700 hover:text-emerald-600 transition-colors duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Admin Dashboard
+                </Link>
+              )}
             </div>
             <div className="flex justify-around pt-2 border-t">
               <button className="flex flex-col items-center gap-1 text-gray-700 hover:text-emerald-600 transition-colors duration-300">

@@ -9,6 +9,7 @@ import SellProductPage from './pages/SellProductPage';
 import CartPage from './pages/CartPage';
 import ProfilePage from './pages/ProfilePage';
 import SellerProfilePage from './pages/SellerProfilePage';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/seller/:sellerId" element={<SellerProfilePage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
       <Footer />
     </div>
