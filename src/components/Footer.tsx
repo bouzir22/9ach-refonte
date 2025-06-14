@@ -7,7 +7,13 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-3xl font-bold mb-4 text-[#f4a622]">9ach</h3>
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="/logo_9ach.png" 
+                alt="9ach - Preloved Style" 
+                className="h-16 w-auto"
+              />
+            </div>
             <p className="text-gray-400 mb-6 max-w-md">
               Your trusted marketplace for pre-loved fashion. Discover unique pieces, save money, and help the environment with every purchase.
             </p>

@@ -31,9 +31,12 @@ const Hero = () => {
 
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <div className="animate-fade-in-up">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Shirt className="text-[#f4a622]" size={32} />
-            <span className="text-[#f4a622] font-semibold text-lg">Pre-Loved Fashion</span>
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <img 
+              src="/logo_9ach.png" 
+              alt="9ach - Preloved Style" 
+              className="h-20 w-auto animate-pulse"
+            />
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
