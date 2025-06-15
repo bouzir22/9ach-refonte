@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Shirt, Tag, TrendingUp } from 'lucide-react';
+import { ArrowRight, Sparkles, Shirt, Tag, TrendingUp, User, Users } from 'lucide-react';
 
 const Hero = () => {
   return (
@@ -94,7 +94,7 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Enhanced featured categories preview */}
+          {/* Enhanced featured categories preview with Lucide icons */}
           <div className="mt-16 grid grid-cols-2 gap-6 max-w-lg mx-auto">
             <Link
               to="/browse?category=Women's Fashion"
@@ -102,7 +102,12 @@ const Hero = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-rose-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
               <div className="relative z-10">
-                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">👗</div>
+                <div className="flex justify-center mb-3">
+                  <User 
+                    size={48} 
+                    className="text-pink-300 group-hover:text-pink-200 group-hover:scale-110 transition-all duration-300" 
+                  />
+                </div>
                 <div className="text-white font-bold text-lg mb-1">Women's</div>
                 <div className="text-pink-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">2,500+ items</div>
               </div>
@@ -115,7 +120,12 @@ const Hero = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
               <div className="relative z-10">
-                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">👔</div>
+                <div className="flex justify-center mb-3">
+                  <Users 
+                    size={48} 
+                    className="text-blue-300 group-hover:text-blue-200 group-hover:scale-110 transition-all duration-300" 
+                  />
+                </div>
                 <div className="text-white font-bold text-lg mb-1">Men's</div>
                 <div className="text-blue-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">1,800+ items</div>
               </div>
