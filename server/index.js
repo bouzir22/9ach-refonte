@@ -330,10 +330,32 @@ app.post('/api/items', upload.array('images', 8), (req, res) => {
     sellerRating, sellerReviews, measurements
   } = req.body;
 
+  // Validate required fields
+  if (!name || !brand || !condition || !size || !category) {
+    return res.status(400).json({ error: 'Missing required fields: name, brand, condition, size, category' });
+  }
+
+  // Validate and sanitize price fields
+  const validatedPrice = parseFloat(price);
+  if (isNaN(validatedPrice) || validatedPrice <= 0) {
+    return res.status(400).json({ error: 'Price must be a positive number' });
+  }
+
+  const validatedOriginalPrice = parseFloat(originalPrice) || validatedPrice;
+  if (isNaN(validatedOriginalPrice) || validatedOriginalPrice < 0) {
+    return res.status(400).json({ error: 'Original price must be a valid number' });
+  }
   // Handle uploaded images
   const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
   const mainImage = images[0] || req.body.image || '';
 
+  // Ensure we have at least one image
+  if (!mainImage) {
+    return res.status(400).json({ error: 'At least one image is required' });
+  }
+
+  // Ensure images array is not empty
+  const finalImages = images.length > 0 ? images : [mainImage];
   const stmt = db.prepare(`
     INSERT INTO items (
       name, brand, price, originalPrice, image, images, condition, size, category,
@@ -343,12 +365,13 @@ app.post('/api/items', upload.array('images', 8), (req, res) => {
   `);
 
   stmt.run([
-    name, brand, parseFloat(price), parseFloat(originalPrice), mainImage, JSON.stringify(images),
+    name, brand, validatedPrice, validatedOriginalPrice, mainImage, JSON.stringify(finalImages),
     condition, size, category, description, material, color, availability || 'store',
     location, sellerName || 'Admin', parseFloat(sellerRating) || 5.0,
     parseInt(sellerReviews) || 0, measurements ? JSON.stringify(measurements) : null
   ], function(err) {
     if (err) {
+      console.error('Database error:', err);
       res.status(500).json({ error: err.message });
       return;
     }
