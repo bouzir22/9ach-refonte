@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Upload, X, Plus, Camera, DollarSign, Tag, Shirt } from 'lucide-react';
+import { apiService } from '../services/api';
 
 const SellProductPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     brand: '',
@@ -23,6 +26,8 @@ const SellProductPage = () => {
 
   const [images, setImages] = useState<string[]>([]);
   const [dragActive, setDragActive] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const categories = [
     'Women\'s Fashion',
@@ -100,10 +105,52 @@ const SellProductPage = () => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', { ...formData, images });
-    // Handle form submission
+    
+    if (images.length === 0) {
+      setSubmitError('Please add at least one image');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const itemData = {
+        name: formData.title,
+        brand: formData.brand,
+        price: parseFloat(formData.sellingPrice),
+        originalPrice: parseFloat(formData.originalPrice) || parseFloat(formData.sellingPrice),
+        image: images[0],
+        images: images,
+        condition: formData.condition,
+        size: formData.size,
+        category: formData.category,
+        description: formData.description,
+        material: formData.material,
+        color: formData.color,
+        availability: 'store' as const,
+        sellerName: 'You', // In a real app, this would come from user auth
+        sellerRating: 5.0,
+        sellerReviews: 0,
+        measurements: formData.measurements.chest || formData.measurements.waist || 
+                     formData.measurements.length || formData.measurements.shoulders 
+                     ? formData.measurements : undefined
+      };
+
+      const response = await apiService.createItem(itemData);
+      
+      // Success - redirect to the new item or home page
+      alert('Item listed successfully!');
+      navigate('/');
+      
+    } catch (error) {
+      console.error('Error creating item:', error);
+      setSubmitError(error instanceof Error ? error.message : 'Failed to create item');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -398,18 +445,26 @@ const SellProductPage = () => {
                 <p>By listing your item, you agree to our Terms of Service and Seller Policy.</p>
               </div>
               
+              {submitError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  {submitError}
+                </div>
+              )}
+              
               <div className="flex gap-4">
                 <button
                   type="button"
+                  disabled={isSubmitting}
                   className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Save as Draft
                 </button>
                 <button
                   type="submit"
-                  className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold"
+                  disabled={isSubmitting}
+                  className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  List Item
+                  {isSubmitting ? 'Listing Item...' : 'List Item'}
                 </button>
               </div>
             </div>

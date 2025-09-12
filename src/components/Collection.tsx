@@ -7,8 +7,13 @@ const Collection = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  const { items, loading, error } = useItems();
+  const { items, loading, error, refetch } = useItems();
   const displayItems = items.slice(0, 6);
+
+  // Refetch items when component mounts to get latest data
+  React.useEffect(() => {
+    refetch();
+  }, []);
 
   const getAlternateImages = (index: number) => {
     const item = displayItems[index];

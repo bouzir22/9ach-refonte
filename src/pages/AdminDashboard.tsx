@@ -18,7 +18,8 @@ import {
   Save,
   X
 } from 'lucide-react';
-import { items } from '../data/items';
+import { useItems } from '../hooks/useItems';
+import { apiService } from '../services/api';
 
 interface BulkItem {
   id?: number;
@@ -56,6 +57,9 @@ const AdminDashboard = () => {
   const [bulkItems, setBulkItems] = useState<BulkItem[]>([]);
   const [csvData, setCsvData] = useState('');
   const [showBulkForm, setShowBulkForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { items, loading, error, refetch } = useItems();
 
   // Mock admin stats
   const stats = {
@@ -167,11 +171,21 @@ const AdminDashboard = () => {
     setBulkItems(bulkItems.filter((_, i) => i !== index));
   };
 
-  const saveBulkItems = () => {
-    console.log('Saving bulk items:', bulkItems);
-    // Here you would typically send the data to your backend
-    alert(`Successfully added ${bulkItems.length} items!`);
-    setBulkItems([]);
+  const saveBulkItems = async () => {
+    if (bulkItems.length === 0) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await apiService.bulkCreateItems(bulkItems);
+      alert(`Successfully added ${response.successCount} out of ${response.totalItems} items!`);
+      setBulkItems([]);
+      refetch(); // Refresh the items list
+    } catch (error) {
+      console.error('Error saving bulk items:', error);
+      alert('Failed to save items. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const downloadTemplate = () => {
@@ -371,6 +385,22 @@ Vintage Denim Jacket,Levi's,45,120,https://images.pexels.com/photos/1082528/pexe
 
               {/* Items Table */}
               <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                {loading ? (
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading items...</p>
+                  </div>
+                ) : error ? (
+                  <div className="text-center py-12">
+                    <p className="text-red-600 mb-4">Error loading items: {error}</p>
+                    <button 
+                      onClick={() => refetch()}
+                      className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-gray-50">
@@ -452,6 +482,7 @@ Vintage Denim Jacket,Levi's,45,120,https://images.pexels.com/photos/1082528/pexe
                     </tbody>
                   </table>
                 </div>
+                )}
               </div>
             </div>
           )}
@@ -514,9 +545,10 @@ Vintage Denim Jacket,Levi's,45,120,https://images.pexels.com/photos/1082528/pexe
                       <button
                         onClick={saveBulkItems}
                         className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                        disabled={isSubmitting}
                       >
                         <Save size={16} />
-                        Save All Items
+                        {isSubmitting ? 'Saving...' : 'Save All Items'}
                       </button>
                     </div>
                   </div>

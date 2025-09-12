@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, Search, Grid, List, SlidersHorizontal, Building2, MapPin } from 'lucide-react';
-import { items } from '../data/items';
+import { useItems } from '../hooks/useItems';
 
 const BrowseCollectionPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,28 +15,24 @@ const BrowseCollectionPage = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
 
+  const { items, loading, error } = useItems({
+    category: selectedCategory === 'All' ? undefined : selectedCategory,
+    brand: selectedBrand === 'All' ? undefined : selectedBrand,
+    size: selectedSize === 'All' ? undefined : selectedSize,
+    condition: selectedCondition === 'All' ? undefined : selectedCondition,
+    availability: selectedAvailability === 'All' ? undefined : selectedAvailability.toLowerCase(),
+    minPrice: priceRange[0],
+    maxPrice: priceRange[1],
+    search: searchTerm || undefined
+  });
+
   const categories = ['All', ...new Set(items.map(item => item.category))];
   const brands = ['All', ...new Set(items.map(item => item.brand))];
   const sizes = ['All', ...new Set(items.map(item => item.size))];
   const conditions = ['All', ...new Set(items.map(item => item.condition))];
   const availabilities = ['All', 'Store', 'Merchant'];
 
-  const filteredItems = items.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.brand.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
-    const matchesBrand = selectedBrand === 'All' || item.brand === selectedBrand;
-    const matchesSize = selectedSize === 'All' || item.size === selectedSize;
-    const matchesCondition = selectedCondition === 'All' || item.condition === selectedCondition;
-    const matchesAvailability = selectedAvailability === 'All' || 
-                               (selectedAvailability === 'Store' && item.availability === 'store') ||
-                               (selectedAvailability === 'Merchant' && item.availability === 'merchant');
-    const matchesPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
-
-    return matchesSearch && matchesCategory && matchesBrand && matchesSize && matchesCondition && matchesAvailability && matchesPrice;
-  });
-
-  const sortedItems = [...filteredItems].sort((a, b) => {
+  const sortedItems = [...items].sort((a, b) => {
     switch (sortBy) {
       case 'price-low':
         return a.price - b.price;
@@ -67,6 +63,36 @@ const BrowseCollectionPage = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading items...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <p className="text-red-600 mb-4">Error loading items: {error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

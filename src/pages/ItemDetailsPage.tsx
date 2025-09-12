@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Heart, Share2, Star, Shield, Truck, RotateCcw, MessageCircle, Building2, MapPin } from 'lucide-react';
-import { items } from '../data/items';
+import { useItem } from '../hooks/useItems';
 
 const ItemDetailsPage = () => {
   const { id } = useParams();
-  const item = items.find(item => item.id === parseInt(id || '0'));
+  const { item, loading, error } = useItem(parseInt(id || '0'));
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState('');
 
-  if (!item) {
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading item...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !item) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Item not found</h2>
-          <Link to="/" className="text-blue-600 hover:underline">Return to home</Link>
+            <h2 className="text-2xl font-bold mb-4">{error || 'Item not found'}</h2>
+            <Link to="/" className="text-blue-600 hover:underline">Return to home</Link>
+          </div>
         </div>
       </div>
     );
