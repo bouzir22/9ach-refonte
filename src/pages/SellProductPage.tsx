@@ -120,29 +120,36 @@ const SellProductPage = () => {
     setSubmitError(null);
 
     try {
-      const itemData = {
-        name: formData.title,
-        brand: formData.brand,
-        price: parseFloat(formData.sellingPrice),
-        originalPrice: parseFloat(formData.originalPrice) || parseFloat(formData.sellingPrice),
-        image: images[0],
-        images: images,
-        condition: formData.condition,
-        size: formData.size,
-        category: formData.category,
-        description: formData.description,
-        material: formData.material,
-        color: formData.color,
-        availability: 'store' as const,
-        sellerName: 'You', // In a real app, this would come from user auth
-        sellerRating: 5.0,
-        sellerReviews: 0,
-        measurements: formData.measurements.chest || formData.measurements.waist || 
-                     formData.measurements.length || formData.measurements.shoulders 
-                     ? formData.measurements : undefined
-      };
+      const formDataToSend = new FormData();
+      
+      // Append all form fields
+      formDataToSend.append('name', formData.title);
+      formDataToSend.append('brand', formData.brand);
+      formDataToSend.append('price', formData.sellingPrice);
+      formDataToSend.append('originalPrice', formData.originalPrice || formData.sellingPrice);
+      formDataToSend.append('condition', formData.condition);
+      formDataToSend.append('size', formData.size);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('material', formData.material);
+      formDataToSend.append('color', formData.color);
+      formDataToSend.append('availability', 'store');
+      formDataToSend.append('sellerName', 'You');
+      formDataToSend.append('sellerRating', '5.0');
+      formDataToSend.append('sellerReviews', '0');
+      
+      // Append measurements if any exist
+      if (formData.measurements.chest || formData.measurements.waist || 
+          formData.measurements.length || formData.measurements.shoulders) {
+        formDataToSend.append('measurements', JSON.stringify(formData.measurements));
+      }
+      
+      // Append image files
+      images.forEach((file, index) => {
+        formDataToSend.append('images', file);
+      });
 
-      const response = await apiService.createItem(itemData);
+      const response = await apiService.createItemWithFiles(formDataToSend);
       
       // Success - redirect to the new item or home page
       alert('Item listed successfully!');
