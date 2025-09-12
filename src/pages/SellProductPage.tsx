@@ -24,7 +24,8 @@ const SellProductPage = () => {
     }
   });
 
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -90,10 +91,11 @@ const SellProductPage = () => {
   const handleFiles = (files: FileList) => {
     Array.from(files).forEach(file => {
       if (file.type.startsWith('image/')) {
+        setImages(prev => [...prev, file]);
         const reader = new FileReader();
         reader.onload = (e) => {
           if (e.target?.result) {
-            setImages(prev => [...prev, e.target!.result as string]);
+            setImagePreviews(prev => [...prev, e.target!.result as string]);
           }
         };
         reader.readAsDataURL(file);
@@ -103,6 +105,7 @@ const SellProductPage = () => {
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -201,10 +204,10 @@ const SellProductPage = () => {
 
             {images.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                {images.map((image, index) => (
+                {imagePreviews.map((preview, index) => (
                   <div key={index} className="relative group">
                     <img
-                      src={image}
+                      src={preview}
                       alt={`Upload ${index + 1}`}
                       className="w-full h-32 object-cover rounded-lg"
                     />
