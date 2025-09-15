@@ -366,8 +366,8 @@ app.post('/api/items', upload.array('images', 8), (req, res) => {
 
   stmt.run([
     name, brand, validatedPrice, validatedOriginalPrice, mainImage, JSON.stringify(finalImages),
-    condition, size, category, description, material, color, availability || 'store',
-    location, sellerName || 'Admin', parseFloat(sellerRating) || 5.0,
+    condition, size, category, description || null, material || null, color || null, availability || 'store',
+    location || null, sellerName || 'Admin', parseFloat(sellerRating) || 5.0,
     parseInt(sellerReviews) || 0, measurements ? JSON.stringify(measurements) : null
   ], function(err) {
     if (err) {
@@ -411,8 +411,8 @@ app.post('/api/items/bulk', (req, res) => {
       stmt.run([
         item.name, item.brand, parseFloat(item.price), parseFloat(item.originalPrice),
         item.image, JSON.stringify(images), item.condition, item.size, item.category,
-        item.description, item.material, item.color, item.availability || 'store',
-        item.location, item.seller?.name || 'Admin', parseFloat(item.seller?.rating) || 5.0,
+        item.description || null, item.material || null, item.color || null, item.availability || 'store',
+        item.location || null, item.seller?.name || 'Admin', parseFloat(item.seller?.rating) || 5.0,
         parseInt(item.seller?.reviews) || 0, item.measurements ? JSON.stringify(item.measurements) : null
       ], function(err) {
         if (err) {
