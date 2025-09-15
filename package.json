@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\" --kill-others-on-fail",
     "dev:client": "vite",
-    "dev:server": "nodemon server/index.js",
+    "dev:server": "nodemon --ignore server/database.sqlite --ignore server/uploads/ server/index.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
